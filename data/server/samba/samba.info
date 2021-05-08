@@ -1,0 +1,45 @@
+*****************************************
+# Complete Resurses on My cfg
+
+[public]
+path = /opt/Corp/tmp/Samba/Svalka
+guest ok = yes
+force user = nobody
+browsable = yes
+writable = yes
+
+[private]
+path = /opt/Corp/tmp/Samba/Private
+valid users = @smbgrp
+guest ok = no
+browsable = yes
+writable = yes
+*****************************************
+
+# Создание папки для samba
+mkdir -p /samba
+# Добавить туда публичный каталог
+mkdir -p /samba/public
+# Добавить туда приватный каталог
+mkdir /samba/private
+# Присвоить необходимые права и владельца публик каталогу
+cd /samba
+chmod -R 0755 public
+# Создание групы, для samba пользователей
+groupadd smbgrp
+# Cоздание пользователя:
+useradd user1
+# Задать пароль, которым нужно пользоватся при входе в ограниченые ресурсы:
+smbpasswd -a user1
+# Добавить товарища, в групу
+usermod -aG smbgrp user1
+# Ограничить права приватному каталогу, указав samba-групу
+chgrp smbgrp /samba/private
+
+
+
+# Заменить значение параметра –s в правилах ниже для соответствия адресному пространству вашей частной сети. Как правило префикс сети /24, если вы явно не подразумеваете иного:
+iptables -A INPUT -p tcp -m tcp --dport 445 –s 10.0.0.0/24 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 139 –s 10.0.0.0/24 -j ACCEPT
+iptables -A INPUT -p udp -m udp --dport 137 –s 10.0.0.0/24 -j ACCEPT
+iptables -A INPUT -p udp -m udp --dport 138 –s 10.0.0.0/24 -j ACCEPT
