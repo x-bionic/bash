@@ -1,17 +1,15 @@
 #! /bin/bash
 
 # Обновление репозиториев / установка необходимых пакетов
-sudo apt-get update && sudo apt-get -y sudo zip unzip wget
+sudo apt-get update && sudo apt-get -y sudo git zip unzip wget
 
-# Создание необходимых директорий / прав
-sudo mkdir -p /opt/Corp
-sudo chmod 777 /opt/Corp
-
-# Закачка архива и его разорхивирование
+# Закачка
 cd /tmp
-wget https://file.zip | sudo unzip file.zip -d /opt/Corp
+git clone https://github.com/x-bionic/script.git
+sudo mv /tmp/git/script /opt/Corp
 
 # Право на доступ/импользование/запуск
+sudo chmod 777 /opt/Corp
 sudo chmod 777 /opt/Corp/start.sh
 sudo chmod 777 /opt/Corp/homemenu.sh
 sudo chmod 777 /opt/Corp/tools
